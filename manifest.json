@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+
+  "name": "JSFiddle Auto Run",
+  "description": "This extension will make JSFiddle automatically run & save while typing",
+  "version": "1.0",
+
+  "icons": {
+     "128": "icon-enabled.png"
+  },
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+
+  "page_action": {
+    "default_icon": "icon-enabled.png",
+    "default_title": "JSFiddle Auto Run"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://jsfiddle.net/*"],
+      "js": ["jsfiddle-mixin.js"]
+    }
+  ],
+
+  "permissions": [
+    "declarativeContent"
+  ]
+}
