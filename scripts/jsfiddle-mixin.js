@@ -56,8 +56,10 @@ let originalValues = {};
 let hideButton = document.createElement('a');
 let showText = showIcon + 'Show Extra Panels';
 let hideText = hideIcon + 'Hide Extra Panels';
+let maxWidth = '100%';
+let display = { show: '', hide: 'none' };
 
-let originalLayout, sidebar, content, leftPanel, horizontalGutter, rightPanel, htmlPanel, verticalGutter, jsPanel;
+let originalLayout, sidebar, content, htmlPanel, jsPanel, cssPanel, resultPanel, hiddenPanels, horizontalGutters;
 
 function findElements() {
   // save current layout
@@ -66,48 +68,37 @@ function findElements() {
       originalLayout = element;
     }
   });
-  // switch to classic layout
-  let classicLayout = document.getElementsByName('editor_mode')[0];
-  classicLayout.click();
-  classicLayout.checked = false;
+  // switch to columns layout, following hidding mechanic are based on columns layout
+  let columnsLayout = document.getElementsByName('editor_mode')[1];
+  columnsLayout.click();
+  columnsLayout.checked = false;
   // find all the elements
   sidebar = document.getElementById('sidebar');
   content = document.getElementById('content');
-  leftPanel = document.getElementsByClassName('panel-v left')[0];
-  horizontalGutter = document.getElementsByClassName('gutter gutter-horizontal')[0];
-  rightPanel = document.getElementsByClassName('panel-v right')[0];
-  htmlPanel = document.getElementsByClassName('panel-h panel')[0];
-  verticalGutter = document.getElementsByClassName('gutter gutter-vertical')[0];
-  jsPanel = document.getElementsByClassName('panel-h panel')[1];
+  [ htmlPanel, jsPanel, cssPanel, resultPanel ] = document.getElementsByClassName('panel-v panel');
+  hiddenPanels = [ htmlPanel, cssPanel, resultPanel ];
+  horizontalGutters = [ ...document.getElementsByClassName('gutter gutter-horizontal') ];
 }
 
 function hidePanels() {
   if (!hidden) {
     findElements();
     // hide sidebar
-    originalValues.sidebarDisplay = sidebar.style.display;
-    sidebar.style.display = 'none';
+    sidebar.style.display = display.hide;
     // max content panel
     originalValues.contentMarginLeft = content.style.marginLeft;
     content.style.marginLeft = 0;
-    // max left panel
-    originalValues.leftPanelWidth = leftPanel.style.width;
-    leftPanel.style.width = '100%';
-    // hide horizontal gutter
-    originalValues.horizontalGutterDisplay = horizontalGutter.style.display;
-    horizontalGutter.style.display = 'none';
-    // hide right panel
-    originalValues.rightPanelDisplay = rightPanel.style.display;
-    rightPanel.style.display = 'none';
-    // hide html panel
-    originalValues.htmlPanelDisplay = htmlPanel.style.display;
-    htmlPanel.style.display = 'none';
-    // hide vertical gutter
-    originalValues.verticalGutterDisplay = verticalGutter.style.display;
-    verticalGutter.style.display = 'none';
     // max js panel
-    originalValues.jsPanelHeight = jsPanel.style.height;
-    jsPanel.style.height = '100%';
+    originalValues.jsPanelWidth = jsPanel.style.Width;
+    jsPanel.style.width = maxWidth;
+    // hide other panels
+    hiddenPanels.forEach(function(panel) {
+      panel.style.display = display.hide;
+    })
+    // hide all horizontal gutters
+    horizontalGutters.forEach(function(horizontalGutter) {
+      horizontalGutter.style.display = display.hide;
+    })
 
     hideButton.innerHTML = showText;
     hidden = true;
@@ -120,21 +111,19 @@ function hidePanels() {
 function showPanels() {
   if (hidden) {
     // show sidebar
-    sidebar.style.display = originalValues.sidebarDisplay;
-    // restore content panel
+    sidebar.style.display = display.show;
+    // resize content panel
     content.style.marginLeft = originalValues.contentMarginLeft;
-    // restore left panel
-    leftPanel.style.width = originalValues.leftPanelWidth;
-    // restore horizontal gutter
-    horizontalGutter.style.display = originalValues.horizontalGutterDisplay;
-    // restore right panel
-    rightPanel.style.display = originalValues.rightPanelDisplay;
-    // restore html panel
-    htmlPanel.style.display = originalValues.htmlPanelDisplay;
-    // restore vertical gutter
-    verticalGutter.style.display = originalValues.verticalGutterDisplay;
-    // restore js panel
-    jsPanel.style.height = originalValues.jsPanelHeight;
+    // resize js panel
+    jsPanel.style.width = originalValues.jsPanelWidth;
+    // show other panels
+    hiddenPanels.forEach(function(panel) {
+      panel.style.display = display.show;
+    })
+    // show all horizontal gutters
+    horizontalGutters.forEach(function(horizontalGutter) {
+      horizontalGutter.style.display = display.show;
+    })
     
     hideButton.innerHTML = hideText;
     // toggle hidden before click on the layout to avoid running show twice
@@ -167,6 +156,6 @@ hideContainer.appendChild(hideButton);
 document.getElementsByClassName('actionCont dropdown')[0].appendChild(hideContainer);
 
 // show panels if they were hidden when switching layout from dropdown
-document.getElementsByName('editor_mode').forEach(function(element) {
+Array.prototype.forEach.call(document.getElementsByName('editor_mode'), function(element) {
   element.parentNode.onclick = showPanels;
 });
