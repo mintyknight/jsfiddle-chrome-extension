@@ -108,11 +108,12 @@ function hidePanels() {
     // max js panel
     originalValues.jsPanelHeight = jsPanel.style.height;
     jsPanel.style.height = '100%';
-    // show original layout as checked
-    originalLayout.checked = true;
 
     hideButton.innerHTML = showText;
     hidden = true;
+
+    // show original layout as checked
+    originalLayout.checked = true;
   }
 };
 
@@ -134,11 +135,14 @@ function showPanels() {
     verticalGutter.style.display = originalValues.verticalGutterDisplay;
     // restore js panel
     jsPanel.style.height = originalValues.jsPanelHeight;
-    // restore layout
-    originalLayout.click();
-
+    
     hideButton.innerHTML = hideText;
+    // toggle hidden before click on the layout to avoid running show twice
     hidden = false;
+
+    // restore layout, needs to uncheck the layout before click
+    originalLayout.checked = false;
+    originalLayout.click();
   }
 };
 
