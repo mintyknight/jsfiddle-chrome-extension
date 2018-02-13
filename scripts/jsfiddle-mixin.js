@@ -6,6 +6,10 @@ function _debounce(func, wait) {
   };
 }
 
+function _autoRun() {
+  document.getElementById('run').click();
+}
+
 let delayedAutoRun;
 
 chrome.storage.local.get('jarsSettings', function(result) {
@@ -14,9 +18,7 @@ chrome.storage.local.get('jarsSettings', function(result) {
     keyupCount: 0
   };
 
-  delayedAutoRun = _debounce(function() {
-    document.getElementById('run').click();
-  }, window.jarsSettings.autoRunDelay);
+  delayedAutoRun = _debounce(_autoRun, window.jarsSettings.autoRunDelay);
 });
 
 document.addEventListener('keyup', function() {
