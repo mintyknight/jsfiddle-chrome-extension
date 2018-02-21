@@ -161,3 +161,57 @@ document.getElementsByClassName('actionCont dropdown')[0].appendChild(hideContai
 Array.prototype.forEach.call(document.getElementsByName('editor_mode'), function(element) {
   element.parentNode.onclick = showPanels;
 });
+
+let elements = {};
+
+function findElementsV2() {
+  let elements = {};
+  // find all the elements
+  // sidebar = document.getElementById('sidebar');
+  // content = document.getElementById('content');
+
+  document.querySelectorAll('div.panel').forEach(function(panel) {
+    let a = panel.querySelector('a.windowLabel');
+    let type;
+    if (a) {
+      type = a.dataset.popoverTrigger;
+    } else {
+      type = 'result';
+    }
+    elements[type] = panel;
+    setupDraggable(panel, type);
+  })
+  
+  // horizontalGutters = [ ...document.getElementsByClassName('gutter gutter-horizontal') ];
+  return elements;
+}
+
+elements = findElementsV2();
+console.log(elements);
+
+
+function swap(from, to) {
+  console.log(from, to);
+  
+}
+
+function setupDraggable(panel, type) {
+  function dragstart_handler(ev) {
+    ev.dataTransfer.setData('element', type);
+    ev.dataTransfer.effectAllowed = 'move';
+  }
+
+  function dragover_handler(ev) {
+    ev.preventDefault();
+  }
+
+  function drop_handler(ev) {
+    swap(ev.dataTransfer.getData('element'), type);
+    ev.preventDefault();
+  }
+
+  panel.draggable = true;
+  panel.ondragstart = dragstart_handler;
+  panel.ondragover = dragover_handler;
+  panel.addEventListener('drop', drop_handler, true);
+}
