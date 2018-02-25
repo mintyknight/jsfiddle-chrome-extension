@@ -12,7 +12,7 @@
   },
 
   "background": {
-    "scripts": ["scripts/background.js"],
+    "scripts": [ "scripts/background.js" ],
     "persistent": false
   },
 
@@ -20,8 +20,9 @@
 
   "content_scripts": [
     {
-      "matches": ["https://jsfiddle.net/*"],
-      "js": ["scripts/jsfiddle-mixin.js"],
+      "matches": [ "https://jsfiddle.net/*" ],
+      "js": [ "scripts/jsfiddle-mixin.js" ],
+      "css": [ "css/jsfiddle-mixin.css" ],
       "run_at": "document_end"
     }
   ],

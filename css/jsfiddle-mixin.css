@@ -1,0 +1,6 @@
+/* the hidden update button and its popup window somehow interferes 
+   with the ablitity to select other clickables which lie below it
+ */
+.hidden {
+  display: none;
+}

@@ -187,12 +187,24 @@ function findElementsV2() {
 }
 
 elements = findElementsV2();
-console.log(elements);
+let resultClass = 'resultsPanel';
 
+function moveChildrenAndSpecialCLass(fromElement, toElement) {
+  [ ...fromElement.children ].forEach(child => toElement.appendChild(child));
+  if (fromElement.classList.contains(resultClass)) {
+    fromElement.classList.remove(resultClass);
+    toElement.classList.add(resultClass);
+  }
+}
 
 function swap(from, to) {
-  console.log(from, to);
-  
+  let fromPanel = elements[from];
+  let toPanel = elements[to];
+  let tempPanel = document.createElement('div');
+
+  moveChildrenAndSpecialCLass(fromPanel, tempPanel);
+  moveChildrenAndSpecialCLass(toPanel, fromPanel);
+  moveChildrenAndSpecialCLass(tempPanel, toPanel);
 }
 
 function setupDraggable(panel, type) {
