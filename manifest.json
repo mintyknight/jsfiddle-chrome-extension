@@ -3,7 +3,7 @@
 
   "name": "JSFiddle Enhancer",
   "description": "This extension enhances users' control on jsFiddle Page",
-  "version": "0.0.1",
+  "version": "0.0.2",
 
   "icons": {
     "16": "images/icon-enabled-16.png",
