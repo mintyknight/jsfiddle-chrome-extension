@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "JSFiddle Auto Run & Save",
-  "description": "This extension makes JSFiddle automatically run & save while typing, also adds a button to hide panels other than js",
+  "name": "JSFiddle Enhancer",
+  "description": "This extension enhances users' control on jsFiddle Page",
   "version": "0.0.1",
 
   "icons": {
@@ -27,8 +27,6 @@
   ],
 
   "permissions": [
-    "tabs",
-    "storage",
     "declarativeContent"
   ]
 }
